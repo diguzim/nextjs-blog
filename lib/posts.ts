@@ -6,9 +6,17 @@ import html from "remark-html";
 
 const postsDirectory = path.join(process.cwd(), "posts");
 
+interface Post {
+  id: string;
+  date: string;
+  title: string;
+}
+
 export function getSortedPostsData() {
+  
   // Get file names under /posts
   const fileNames = fs.readdirSync(postsDirectory);
+
   const allPostsData = fileNames.map((fileName) => {
     // Remove ".md" from file name to get id
     const id = fileName.replace(/\.md$/, "");
@@ -24,7 +32,7 @@ export function getSortedPostsData() {
     return {
       id,
       ...matterResult.data,
-    };
+    } as Post;
   });
   // Sort posts by date
   return allPostsData.sort((a, b) => {
@@ -61,7 +69,7 @@ export function getAllPostIds() {
   });
 }
 
-export async function getPostData(id) {
+export async function getPostData(id: string) {
   const fullPath = path.join(postsDirectory, `${id}.md`);
   const fileContents = fs.readFileSync(fullPath, "utf8");
 
@@ -78,6 +86,6 @@ export async function getPostData(id) {
   return {
     id,
     contentHtml,
-    ...matterResult.data,
+    ...(matterResult.data as { date: string; title: string })
   };
 }

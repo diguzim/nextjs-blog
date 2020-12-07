@@ -6,7 +6,14 @@ import Link from "next/link";
 const name = "Diguzim";
 export const siteTitle = "Next.js Sample Website";
 
-export default function Layout({ children, home }) {
+interface LayoutProps {
+  children: any;
+  home?: boolean;
+}
+
+export default function Layout(props: LayoutProps) {
+  const { children, home } = props;
+
   return (
     <div className={styles.container}>
       <Head>
